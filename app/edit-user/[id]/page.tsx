@@ -2,16 +2,16 @@
 
 import { useEffect } from "react"
 import { useParams, useRouter } from "next/navigation"
+import { useForm } from "react-hook-form"
+import { toast } from "sonner"
 import { Button } from "@/components/ui/button"
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
-import { useForm } from "react-hook-form"
-import { toast } from "sonner"
 
-const EditUserPage = ({ idUser }: { idUser: string }) => {
+const EditUserPage = () => {
   const params = useParams()
   const router = useRouter()
-  const id = params?.id as string
+  const id = params.id as string
 
   const form = useForm({
     defaultValues: {
@@ -21,7 +21,6 @@ const EditUserPage = ({ idUser }: { idUser: string }) => {
     }
   })
 
-  // Fetch user data by id and set as default values
   useEffect(() => {
     const fetchUser = async () => {
       if (!id) return
@@ -31,7 +30,7 @@ const EditUserPage = ({ idUser }: { idUser: string }) => {
         form.reset({
           username: user.username || "",
           email: user.email || "",
-          password: "" // don't prefill password
+          password: ""
         })
       } else {
         toast.error("Failed to fetch user data.")
@@ -46,16 +45,12 @@ const EditUserPage = ({ idUser }: { idUser: string }) => {
       const res = await fetch(`/api/update-user/${id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          username: data.username,
-          email: data.email,
-          password: data.password,
-        }),
+        body: JSON.stringify(data),
       })
 
       if (res.ok) {
         toast.success("User updated successfully!")
-        router.push("/users") // redirect or refresh as needed
+        router.push("/dashboard")
       } else {
         const err = await res.json()
         toast.error(err.error || "Failed to update user.")
@@ -114,7 +109,7 @@ const EditUserPage = ({ idUser }: { idUser: string }) => {
                 </FormItem>
               )}
             />
-            <Button variant={"ghost"} type="submit" className="border border-[#fafafa] my-4 shadow hover:border-[#ebebeb] transition-all">Update</Button>
+            <Button type="submit">Update</Button>
           </form>
         </Form>
       </div>
