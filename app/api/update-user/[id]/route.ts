@@ -1,9 +1,12 @@
 import prisma from "@/prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 
-export const PUT = async (req: NextRequest, { params }: { params: { id: string } }) => {
+export async function PUT(
+  req: NextRequest,
+  context: { params: any }
+) {
   try {
-    const { id } = params;
+    const { id } = context.params;
     const body = await req.json();
     const { username, email, password } = body;
 
@@ -30,4 +33,4 @@ export const PUT = async (req: NextRequest, { params }: { params: { id: string }
       { status: 500 }
     );
   }
-};
+}
