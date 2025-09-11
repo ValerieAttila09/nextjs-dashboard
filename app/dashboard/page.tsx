@@ -17,6 +17,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
+import Navbar from "@/components/Navbar/Navbar"
 
 type User = {
   id: string;
@@ -58,14 +59,16 @@ const Dashboard = () => {
 
 
   return (
-    <div className="w-full">
+    <div className="w-full flex">
 
-      <div className="max-w-5xl mx-auto py-6">
+      <Navbar isDashboard={true} classes={"h-screen"}/>
+
+      <div className="ps-8 py-5">
         <h1 className="mb-5 text-4xl font-medium text-neutral-900">Users List</h1>
 
-        <div className="grid grid-cols-3 gap-4">
+        <div className="w-full grid grid-cols-3 gap-4">
           {users.map((user, index) => (
-            <div key={user.id} className="p-4 rounded-lg border border-[#ebebeb] hover:shadow-lg transition-all">
+            <div key={user.id} className="col-span-1 w-full p-4 rounded-lg border border-[#ebebeb] hover:shadow-lg transition-all">
               <div className="w-full flex items-center justify-between">
                 <span className="text-sm text-neutral-500 font-thin">{index + 1}</span>
                 <Popover>
