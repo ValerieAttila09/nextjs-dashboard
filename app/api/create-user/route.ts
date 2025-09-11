@@ -23,7 +23,7 @@ export const POST = async (req: NextRequest) => {
 
   } catch (error) {
     return NextResponse.json({
-      error: "Failed to create user!"
+      error: "Failed to create user!qsssq"
     }, { status: 500 })
   }
 }
