@@ -32,7 +32,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`outfit-thin antialiased`}
+        className={`outfit-thin antialiased bg-neutral-50`}
       >
         <Toaster/>
         {children}
