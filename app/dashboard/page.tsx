@@ -34,7 +34,7 @@ const Dashboard = () => {
   const [users, setUsers] = useState<User[]>([])
   const [active, setActive] = useState(true)
   const sidebarRef = useRef<HTMLDivElement>(null)
-  const menu = useRef<HTMLDivElement>(null)
+  const menuRefs = useRef<Array<HTMLSpanElement | null>>([])
 
   const getAllUser = async () => {
     try {
@@ -71,12 +71,29 @@ const Dashboard = () => {
         ease: "power2.out",
         duration: 0.4,
       })
-      gsap.to(menu, {
-        width: active ? "0px" : "auto",
+      gsap.to(menuRefs.current, {
         opacity: active ? 0 : 1,
-        autoAlpha: active ? 0 : 1,
-        ease: "power2.out",
-        duration: 0.4
+        width: active ? 0 : "auto",
+        marginLeft: active ? 0 : "8px",
+        ease: "power2.inOut",
+        duration: 0.4,
+        onStart: () => {
+          if (active) {
+            menuRefs.current.forEach((el) => {
+              if (el) el.style.overflow = "hidden"
+            })
+          }
+          if (!active) {
+            menuRefs.current.forEach((el) => {
+              if (el) el.style.overflow = ""
+              gsap.to(el, {
+                width: "auto",
+                duration: 0.4,
+                ease: "power2.inOut"
+              })
+            })
+          }
+        },
       })
       setActive(!active)
     }
@@ -85,20 +102,25 @@ const Dashboard = () => {
   return (
     <div className="w-full flex">
 
-      <Sidebar element={sidebarRef} isDashboard={true} classes={"h-screen"} menu={menu} />
+      <Sidebar
+        element={sidebarRef}
+        isDashboard={false}
+        classes={"h-screen"}
+        menuRefs={menuRefs}
+      />
 
       <div className="w-full pe-4">
         <div className="flex items-center justify-between py-2">
           <div className="flex items-center gap-2">
-            <SidebarToggle toggleSidebar={toggleSidebar} classes={""}/>
+            <SidebarToggle toggleSidebar={toggleSidebar} classes={""} />
             <div className="relative w-auto">
               <Input type="text" className="bg-white ps-[30px] text-neutral-800" placeholder="Search" />
-              <Search size={16} color="#898989" className="absolute z-5 -translate-y-[26px] translate-x-2"/>
+              <Search size={16} color="#898989" className="absolute z-5 -translate-y-[26px] translate-x-2" />
             </div>
           </div>
           <div className="">
             <Link href={"/create-user"} className="flex items-center h-8 rounded-md gap-1.5 px-3 has-[>svg]:px-2.5 border bg-background shadow-xs hover:bg-accent hover:text-accent-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50">
-              <Plus size={14} color="#898989" className=""/>
+              <Plus size={14} color="#898989" className="" />
               <span className="text-sm text-neutral-800">Add User</span>
             </Link>
           </div>
